@@ -1,0 +1,75 @@
+python -m venv .venv
+
+.\.venv\Scripts\activate
+
+pip install -r requirements.txt
+
+mkdir temp
+
+go to https://developers.google.com/ > https://aistudio.google.com/app/apikey
+
+create .env containg GOOGLE_API_KEY=...
+
+FINALLY:
+streamlit run app.py
+
+PROMPT:
+extract the details in this invoice in json below
+for any outlier, put a null value against the json property
+just provide the json and say nothing else
+ 
+[
+  "Name": {{rate name}},
+  "Type": {{USAGE or DAILY}},
+  "Value": {{numeric value per unit},
+  "Unit": {{rate unit}},
+  "Usage": {{number of units used or number of days}},
+  "Total": {{result of rate value per unit multiplied by usage of units/days}}
+]
+
+RESULT:
+[
+  {
+    "Name": "Peak Energy Use",
+    "Type": "USAGE",
+    "Value": 0.157,
+    "Unit": "c/kWh",
+    "Usage": 2584,
+    "Total": 405.69
+  },
+  {
+    "Name": "Supply Charge",
+    "Type": "DAILY",
+    "Value": 0.689,
+    "Unit": "c/Day",
+    "Usage": 93,
+    "Total": 64.08
+  },
+  {
+    "Name": "ACT Gvt Household Rebate",
+    "Type": "null",
+    "Value": null,
+    "Unit": "null",
+    "Usage": null,
+    "Total": 188.27
+  },
+  {
+    "Name": "Late Payment Fee",
+    "Type": "null",
+    "Value": null,
+    "Unit": "null",
+    "Usage": null,
+    "Total": 12.00
+  },
+  {
+    "Name": "Card Payment Fee",
+    "Type": "null",
+    "Value": null,
+    "Unit": "null",
+    "Usage": null,
+    "Total": 3.44
+  }
+]
+
+REMEMBER:
+clean up `temp` directory

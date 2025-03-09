@@ -30,7 +30,10 @@ def initialize_resources():
 
 
 def get_retriever(pdf_file):
-    with NamedTemporaryFile(suffix="pdf") as temp:
+    # with NamedTemporaryFile(suffix="pdf") as temp: # Got the error "Permission denied".
+    current_app_path = os.path.dirname(os.path.abspath(__file__))
+    local_temp_path = os.path.join(current_app_path, 'temp')
+    with NamedTemporaryFile(suffix="pdf", dir=local_temp_path, delete=False) as temp:
         temp.write(pdf_file.getvalue())
         pdf_loader = PyPDFLoader(temp.name, extract_images=True)
         pages = pdf_loader.load()
