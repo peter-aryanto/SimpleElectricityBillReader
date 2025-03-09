@@ -97,6 +97,20 @@ def query_response(query, _retriever):
     # return response
     return answer
 
+def query_response2(query, _retriever):
+    # Create a ConversationalRetrievalChain without memory
+    conversational_chain = ConversationalRetrievalChain.from_llm(
+        llm=chat_model, retriever=_retriever, verbose=False
+    )
+
+    # Ensure chat_history is included in the input
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []  # Initialize chat history if not present
+
+    response = conversational_chain.invoke({"question": query, "chat_history": []})
+    answer = response.get("answer", "")
+    return answer
+
 
 if "doc" not in st.session_state:
     st.session_state.doc = ""
@@ -140,7 +154,8 @@ if st.session_state != "":
 
         # Pass our input to the llm chain and capture the final responses.
         # here once the llm has finished generating the complete response.
-        response = query_response(user_prompt, doc_retriever)
+        # response = query_response(user_prompt, doc_retriever)
+        response = query_response2(user_prompt, doc_retriever)
 
         # Add the response to the session state
         st.session_state.messages.append({"role": "assistant", "content": response})
